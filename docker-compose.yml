@@ -25,4 +25,4 @@ services:
     command: ["npm", "run", "start:prod"]
 
 volumes:
-  pgdata
+  pgdata:
