@@ -37,7 +37,7 @@ export class CarService {
 
   async findOne(id: string) {
     try {
-      const car = await this.carRepo.findOne({ where: { id } });
+      const car = await this.carRepo.findOne({ where: { id: new ObjectId(id) } });
       if (!car) {
         throw new BadRequestException('Car not found');
       }
@@ -49,7 +49,7 @@ export class CarService {
 
   async update(id: string, updateCarDto: UpdateCarDto) {
     try {
-      const car = await this.carRepo.findOne({ where: { id } });
+      const car = await this.carRepo.findOne({ where: { id: new ObjectId(id) } });
       if (!car) {
         throw new BadRequestException('Car not found');
       }
