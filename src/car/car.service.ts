@@ -4,7 +4,6 @@ import { UpdateCarDto } from './dto/update-car.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Car } from './entities/car.entity';
 import { Repository } from 'typeorm';
-import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class CarService {
@@ -37,7 +36,7 @@ export class CarService {
 
   async findOne(id: string) {
     try {
-      const car = await this.carRepo.findOne({ where: { id: new ObjectId(id) } });
+      const car = await this.carRepo.findOne({ where: { id: +id } });
       if (!car) {
         throw new BadRequestException('Car not found');
       }
@@ -49,7 +48,7 @@ export class CarService {
 
   async update(id: string, updateCarDto: UpdateCarDto) {
     try {
-      const car = await this.carRepo.findOne({ where: { id: new ObjectId(id) } });
+      const car = await this.carRepo.findOne({ where: { id: +id } });
       if (!car) {
         throw new BadRequestException('Car not found');
       }
@@ -62,7 +61,7 @@ export class CarService {
 
   async remove(id: string) {
     try {
-      const result = await this.carRepo.delete(new ObjectId(id));
+      const result = await this.carRepo.delete({ id: +id });
       if (result.affected == 0) {
         throw new BadRequestException('Car not found or already deleted');
       }
