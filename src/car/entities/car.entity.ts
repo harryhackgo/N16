@@ -1,10 +1,9 @@
-import { ObjectId } from 'mongodb';
-import { Column, Entity, ObjectIdColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Car {
-  @ObjectIdColumn()
-  id: ObjectId
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   make: string;
