@@ -5,8 +5,8 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { CreateProductInput } from './dto/create-product.input';
+import { UpdateProductInput } from './dto/update-product.input';
 import { PrismaService } from '../prisma.service';
 import { Prisma, Product } from '@prisma/client';
 
@@ -14,7 +14,7 @@ import { Prisma, Product } from '@prisma/client';
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(@Body() createProductDto: CreateProductDto, imagePath: string | null): Promise<Product> {
+  async create(@Body() createProductDto: CreateProductInput, imagePath: string | null): Promise<Product> {
     try {
       const created = await this.prisma.product.create({
         data: {...createProductDto, imagePath},
@@ -32,10 +32,9 @@ export class ProductsService {
     }
   }
 
-  async findAll(params: {skip?: number; take?: number; cursor?: Prisma.ProductWhereUniqueInput; where?: Prisma.ProductWhereInput; orderBy?: Prisma.ProductOrderByWithRelationInput}) {
+  async findAll() {
     try {
-      const { skip, take, cursor, where, orderBy } = params;
-      const foundProducts = await this.prisma.product.findMany({ skip, take, cursor, where, orderBy});
+      const foundProducts = await this.prisma.product.findMany();
     return foundProducts;
     } catch (error) {
       throw new InternalServerErrorException(
@@ -56,11 +55,11 @@ export class ProductsService {
     }
   }
 
-  update(id: string, updateProductDto: UpdateProductDto) {
+  update(id: string, updateProductInput: UpdateProductInput) {
     try {
       return this.prisma.product.update({
         where: { id },
-        data: updateProductDto,
+        data: updateProductInput,
       });
     } catch (error) {
       throw new InternalServerErrorException(
