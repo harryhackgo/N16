@@ -25,6 +25,7 @@ import {
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -36,6 +37,7 @@ export class OrderToolsController {
 
   @Roles(Role.User)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new OrderTool record' })
   @ApiResponse({ status: 201, description: 'OrderTool created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -45,6 +47,7 @@ export class OrderToolsController {
 
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Get a list of OrderTools with optional filters',
   })
@@ -96,6 +99,7 @@ export class OrderToolsController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get an OrderTool by ID' })
   @ApiResponse({ status: 200, description: 'OrderTool found' })
   @ApiResponse({ status: 404, description: 'OrderTool not found' })
@@ -105,6 +109,7 @@ export class OrderToolsController {
 
   @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update an OrderTool by ID' })
   @ApiResponse({ status: 200, description: 'OrderTool updated successfully' })
   @ApiResponse({ status: 404, description: 'OrderTool not found' })
@@ -114,6 +119,7 @@ export class OrderToolsController {
 
   @Roles( Role.Admin, Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete an OrderTool by ID' })
   @ApiResponse({ status: 200, description: 'OrderTool deleted successfully' })
   @ApiResponse({ status: 404, description: 'OrderTool not found' })

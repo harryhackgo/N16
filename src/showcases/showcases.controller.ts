@@ -24,6 +24,7 @@ import {
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -35,6 +36,7 @@ export class ShowcasesController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new showcase' })
   @ApiResponse({ status: 201, description: 'Showcase created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -43,6 +45,7 @@ export class ShowcasesController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a list of showcases with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -99,6 +102,7 @@ export class ShowcasesController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a showcase by ID' })
   @ApiResponse({ status: 200, description: 'Showcase found' })
   @ApiResponse({ status: 404, description: 'Showcase not found' })
@@ -108,6 +112,7 @@ export class ShowcasesController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a showcase by ID' })
   @ApiResponse({ status: 200, description: 'Showcase updated successfully' })
   @ApiResponse({ status: 404, description: 'Showcase not found' })
@@ -120,6 +125,7 @@ export class ShowcasesController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a showcase by ID' })
   @ApiResponse({ status: 200, description: 'Showcase deleted successfully' })
   @ApiResponse({ status: 404, description: 'Showcase not found' })

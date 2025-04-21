@@ -24,6 +24,7 @@ import {
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -35,6 +36,7 @@ export class FavItemsController {
 
   @Roles(Role.User)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new favorite item' })
   @ApiResponse({ status: 201, description: 'FavItem created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -44,6 +46,7 @@ export class FavItemsController {
 
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a list of FavItems with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -98,6 +101,7 @@ export class FavItemsController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a FavItem by ID' })
   @ApiResponse({ status: 200, description: 'FavItem found' })
   @ApiResponse({ status: 404, description: 'FavItem not found' })
@@ -107,6 +111,7 @@ export class FavItemsController {
 
   @Roles(Role.User, Role.SuperAdmin)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a FavItem by ID' })
   @ApiResponse({ status: 200, description: 'FavItem updated successfully' })
   @ApiResponse({ status: 404, description: 'FavItem not found' })
@@ -116,6 +121,7 @@ export class FavItemsController {
 
   @Roles(Role.User, Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a FavItem by ID' })
   @ApiResponse({ status: 200, description: 'FavItem deleted successfully' })
   @ApiResponse({ status: 404, description: 'FavItem not found' })

@@ -25,6 +25,7 @@ import {
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.Admin, Role.SuperAdmin)
 @UseGuards(RolesGuard)
@@ -35,6 +36,7 @@ export class CapacitiesController {
   constructor(private readonly capacitiesService: CapacitiesService) {}
 
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new capacity' })
   @ApiResponse({ status: 201, description: 'Capacity created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -44,6 +46,7 @@ export class CapacitiesController {
 
   @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a list of capacities with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -90,6 +93,7 @@ export class CapacitiesController {
 
   @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
   @Get('name/:name')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get capacity by name' })
   @ApiParam({ name: 'name', required: true })
   @ApiResponse({ status: 200, description: 'Capacity found by name' })
@@ -100,6 +104,7 @@ export class CapacitiesController {
 
   @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a capacity by ID' })
   @ApiParam({ name: 'id' })
   @ApiResponse({ status: 200, description: 'Capacity found' })
@@ -109,6 +114,7 @@ export class CapacitiesController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a capacity by ID' })
   @ApiResponse({ status: 200, description: 'Capacity updated successfully' })
   @ApiResponse({ status: 404, description: 'Capacity not found' })
@@ -117,6 +123,7 @@ export class CapacitiesController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a capacity by ID' })
   @ApiResponse({ status: 200, description: 'Capacity deleted successfully' })
   @ApiResponse({ status: 404, description: 'Capacity not found' })

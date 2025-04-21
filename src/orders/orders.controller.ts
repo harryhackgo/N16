@@ -25,6 +25,7 @@ import { CacheInterceptor } from '@nestjs/cache-manager';
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -36,6 +37,7 @@ export class OrdersController {
 
   @Roles(Role.User)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new order with tools and workers' })
   @ApiResponse({ status: 201, description: 'Order created successfully' })
   @ApiResponse({ status: 400, description: 'Invalid input or related entity not found' })
@@ -44,6 +46,7 @@ export class OrdersController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all orders with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -92,6 +95,7 @@ export class OrdersController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get an order by ID' })
   @ApiParam({ name: 'id', required: true })
   @ApiResponse({ status: 200, description: 'Order found' })
@@ -102,6 +106,7 @@ export class OrdersController {
 
   @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update an order by ID' })
   @ApiParam({ name: 'id', required: true })
   @ApiResponse({ status: 200, description: 'Order updated successfully' })
@@ -112,6 +117,7 @@ export class OrdersController {
 
   @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete an order by ID' })
   @ApiParam({ name: 'id', required: true })
   @ApiResponse({ status: 200, description: 'Order deleted successfully' })

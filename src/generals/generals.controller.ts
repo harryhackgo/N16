@@ -24,7 +24,7 @@ import {
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
-import { Public } from '../decorators/public.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.Admin, Role.SuperAdmin, Role.ViewerAdmin, Role.User)
 
@@ -37,6 +37,7 @@ export class GeneralsController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create general information' })
   @ApiResponse({ status: 201, description: 'General info created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -45,6 +46,7 @@ export class GeneralsController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all general records with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -95,6 +97,7 @@ export class GeneralsController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a general record by ID' })
   @ApiResponse({ status: 200, description: 'General info found' })
   @ApiResponse({ status: 404, description: 'General info not found' })
@@ -104,6 +107,7 @@ export class GeneralsController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update general information by ID' })
   @ApiResponse({ status: 200, description: 'General info updated successfully' })
   @ApiResponse({ status: 404, description: 'General info not found' })
@@ -113,6 +117,7 @@ export class GeneralsController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete general information by ID' })
   @ApiResponse({ status: 200, description: 'General info deleted successfully' })
   @ApiResponse({ status: 404, description: 'General info not found' })

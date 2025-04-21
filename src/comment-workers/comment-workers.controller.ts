@@ -25,6 +25,7 @@ import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
 import { GetUser } from '../decorators/get-user.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -36,6 +37,7 @@ export class CommentWorkersController {
 
   @Roles(Role.User)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new comment for a worker' })
   @ApiResponse({ status: 201, description: 'CommentWorker created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -44,6 +46,7 @@ export class CommentWorkersController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a list of CommentWorkers with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -97,6 +100,7 @@ export class CommentWorkersController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a CommentWorker by ID' })
   @ApiResponse({ status: 200, description: 'CommentWorker found' })
   @ApiResponse({ status: 404, description: 'CommentWorker not found' })
@@ -106,6 +110,7 @@ export class CommentWorkersController {
 
   @Roles(Role.User)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a CommentWorker by ID' })
   @ApiResponse({ status: 200, description: 'CommentWorker updated successfully' })
   @ApiResponse({ status: 404, description: 'CommentWorker not found' })
@@ -119,6 +124,7 @@ export class CommentWorkersController {
 
   @Roles(Role.User)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a CommentWorker by ID' })
   @ApiResponse({ status: 200, description: 'CommentWorker deleted successfully' })
   @ApiResponse({ status: 404, description: 'CommentWorker not found' })

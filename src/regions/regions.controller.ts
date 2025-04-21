@@ -25,6 +25,7 @@ import {
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -36,6 +37,7 @@ export class RegionsController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new region' })
   @ApiResponse({ status: 201, description: 'Region created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -44,6 +46,7 @@ export class RegionsController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a list of regions with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -53,7 +56,6 @@ export class RegionsController {
     required: false,
     description: 'Search by region name',
   })
-  
   @ApiQuery({ name: 'orderBy', required: false, example: 'name:asc' })
   @ApiResponse({ status: 200, description: 'List of regions returned' })
   findAll(
@@ -96,6 +98,7 @@ export class RegionsController {
   }
 
   @Get('name/:name')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get region by name' })
   @ApiParam({ name: 'name', required: true })
   @ApiResponse({ status: 200, description: 'Region found by name' })
@@ -105,6 +108,7 @@ export class RegionsController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a region by ID' })
   @ApiResponse({ status: 200, description: 'Region found' })
   @ApiResponse({ status: 404, description: 'Region not found' })
@@ -114,6 +118,7 @@ export class RegionsController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a region by ID' })
   @ApiResponse({ status: 200, description: 'Region updated successfully' })
   @ApiResponse({ status: 404, description: 'Region not found' })
@@ -123,6 +128,7 @@ export class RegionsController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a region by ID' })
   @ApiResponse({ status: 200, description: 'Region deleted successfully' })
   @ApiResponse({ status: 404, description: 'Region not found' })

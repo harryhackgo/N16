@@ -26,6 +26,7 @@ import { CacheInterceptor } from '@nestjs/cache-manager';
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -37,6 +38,7 @@ export class FavoritesController {
 
   @Roles(Role.User)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new Favorite' })
   @ApiResponse({ status: 201, description: 'Favorite created successfully' })
   @ApiResponse({ status: 400, description: 'Invalid input or already exists' })
@@ -45,6 +47,7 @@ export class FavoritesController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all Favorites with filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -94,6 +97,7 @@ export class FavoritesController {
 
   
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a Favorite by ID' })
   @ApiParam({ name: 'id', required: true })
   @ApiResponse({ status: 200, description: 'Favorite found' })
@@ -104,6 +108,7 @@ export class FavoritesController {
 
   @Roles(Role.User, Role.SuperAdmin)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a Favorite by ID' })
   @ApiParam({ name: 'id', required: true })
   @ApiResponse({ status: 200, description: 'Favorite updated successfully' })
@@ -114,6 +119,7 @@ export class FavoritesController {
 
   @Roles(Role.User, Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a Favorite by ID' })
   @ApiParam({ name: 'id', required: true })
   @ApiResponse({ status: 200, description: 'Favorite deleted successfully' })

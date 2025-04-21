@@ -25,6 +25,7 @@ import {
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -36,6 +37,7 @@ export class SizesController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new size' })
   @ApiResponse({ status: 201, description: 'Size created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -44,6 +46,7 @@ export class SizesController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a list of sizes with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -95,6 +98,7 @@ export class SizesController {
   }
 
   @Get('name/:name')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get size by name' })
   @ApiParam({ name: 'name', required: true })
   @ApiResponse({ status: 200, description: 'Size found by name' })
@@ -104,6 +108,7 @@ export class SizesController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a size by ID' })
   @ApiResponse({ status: 200, description: 'Size found' })
   @ApiResponse({ status: 404, description: 'Size not found' })
@@ -113,6 +118,7 @@ export class SizesController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a size by ID' })
   @ApiResponse({ status: 200, description: 'Size updated successfully' })
   @ApiResponse({ status: 404, description: 'Size not found' })
@@ -122,6 +128,7 @@ export class SizesController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a size by ID' })
   @ApiResponse({ status: 200, description: 'Size deleted successfully' })
   @ApiResponse({ status: 404, description: 'Size not found' })

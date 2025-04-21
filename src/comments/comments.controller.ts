@@ -27,6 +27,7 @@ import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
 import { GetUser } from '../decorators/get-user.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -38,6 +39,7 @@ export class CommentsController {
 
   @Roles(Role.User)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a comment and assign to workers' })
   @ApiResponse({ status: 201, description: 'Comment created with assignments' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -46,6 +48,7 @@ export class CommentsController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a list of comments with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -94,6 +97,7 @@ export class CommentsController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a comment by ID' })
   @ApiResponse({ status: 200, description: 'Comment found' })
   @ApiResponse({ status: 404, description: 'Comment not found' })
@@ -103,6 +107,7 @@ export class CommentsController {
 
 
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a comment by ID' })
   @ApiResponse({ status: 200, description: 'Comment updated successfully' })
   @ApiResponse({ status: 404, description: 'Comment not found' })
@@ -112,6 +117,7 @@ export class CommentsController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a comment by ID' })
   @ApiResponse({ status: 200, description: 'Comment deleted successfully' })
   @ApiResponse({ status: 404, description: 'Comment not found' })

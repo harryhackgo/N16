@@ -25,6 +25,7 @@ import {
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -37,6 +38,7 @@ export class ToolsController {
   
   @Roles(Role.Admin, Role.SuperAdmin)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new tool' })
   @ApiResponse({ status: 201, description: 'Tool created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -45,6 +47,7 @@ export class ToolsController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a list of tools with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -95,6 +98,7 @@ export class ToolsController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a tool by ID' })
   @ApiParam({ name: 'id', description: 'Tool UUID' })
   @ApiResponse({ status: 200, description: 'Tool found' })
@@ -105,6 +109,7 @@ export class ToolsController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a tool by ID' })
   @ApiParam({ name: 'id', description: 'Tool UUID' })
   @ApiResponse({ status: 200, description: 'Tool updated successfully' })
@@ -115,6 +120,7 @@ export class ToolsController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a tool by ID' })
   @ApiParam({ name: 'id', description: 'Tool UUID' })
   @ApiResponse({ status: 200, description: 'Tool deleted successfully' })

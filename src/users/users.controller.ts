@@ -45,6 +45,7 @@ export class UsersController {
     required: false,
     description: 'Search by email, fullname, phone, etc.',
   })
+  @ApiBearerAuth()
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
   @ApiQuery({ name: 'cursor', required: false })

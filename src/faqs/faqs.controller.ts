@@ -25,6 +25,7 @@ import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
 import { Public } from '../decorators/public.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.Admin, Role.SuperAdmin)
 @UseGuards(RolesGuard)
@@ -35,6 +36,7 @@ export class FaqsController {
   constructor(private readonly faqsService: FaqsService) {}
 
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new FAQ entry' })
   @ApiResponse({ status: 201, description: 'FAQ created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -111,6 +113,7 @@ export class FaqsController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a FAQ by ID' })
   @ApiResponse({ status: 200, description: 'FAQ updated successfully' })
   @ApiResponse({ status: 404, description: 'FAQ not found' })
@@ -119,6 +122,7 @@ export class FaqsController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a FAQ by ID' })
   @ApiResponse({ status: 200, description: 'FAQ deleted successfully' })
   @ApiResponse({ status: 404, description: 'FAQ not found' })

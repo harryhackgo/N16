@@ -25,6 +25,7 @@ import {
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -36,6 +37,7 @@ export class CompaniesController {
 
   @Roles(Role.User)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new company' })
   @ApiResponse({ status: 201, description: 'Company created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -44,6 +46,7 @@ export class CompaniesController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a list of companies with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -99,6 +102,7 @@ export class CompaniesController {
   }
 
   @Get('name/:name')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a company by name' })
   @ApiParam({ name: 'name', required: true })
   @ApiResponse({ status: 200, description: 'Company found by name' })
@@ -108,6 +112,7 @@ export class CompaniesController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a company by ID' })
   @ApiResponse({ status: 200, description: 'Company found' })
   @ApiResponse({ status: 404, description: 'Company not found' })
@@ -117,6 +122,7 @@ export class CompaniesController {
 
   @Roles(Role.User)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a company by ID' })
   @ApiResponse({ status: 200, description: 'Company updated successfully' })
   @ApiResponse({ status: 404, description: 'Company not found' })
@@ -129,6 +135,7 @@ export class CompaniesController {
 
   @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a company by ID' })
   @ApiResponse({ status: 200, description: 'Company deleted successfully' })
   @ApiResponse({ status: 404, description: 'Company not found' })

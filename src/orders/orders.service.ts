@@ -8,10 +8,13 @@ import { PrismaService } from '../prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order, Prisma } from '@prisma/client';
+import { TelegramService } from './telegram-bot.service';
 
 @Injectable()
 export class OrdersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService,
+    private botService: TelegramService,
+  ) {}
 
   async create(dto: CreateOrderDto) {
     const {
@@ -123,11 +126,16 @@ export class OrdersService {
           user: true,
           paymentMethod: true,
           orderTools: true,
-          orderWorkers: true,
+          orderWorkers: {
+            include: {
+              workerProficiency: true,
+              workerLevel: true,
+            }
+          },
           comments: true,
         },
       });
-
+      await this.botService.sendOrderNotification(createdOrder);
       return createdOrder
     } catch (error) {
       throw new InternalServerErrorException('Error creating order: ' + error.message);

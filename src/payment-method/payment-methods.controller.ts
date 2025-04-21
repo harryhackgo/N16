@@ -25,6 +25,7 @@ import {
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -36,6 +37,7 @@ export class PaymentMethodsController {
 
   @Roles( Role.SuperAdmin)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new payment method' })
   @ApiResponse({ status: 201, description: 'Payment method created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -44,6 +46,7 @@ export class PaymentMethodsController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a list of payment methods with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -98,6 +101,7 @@ export class PaymentMethodsController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a payment method by ID' })
   @ApiResponse({ status: 200, description: 'Payment method found' })
   @ApiResponse({ status: 404, description: 'Payment method not found' })
@@ -107,6 +111,7 @@ export class PaymentMethodsController {
 
   @Roles( Role.SuperAdmin)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a payment method by ID' })
   @ApiResponse({ status: 200, description: 'Payment method updated successfully' })
   @ApiResponse({ status: 404, description: 'Payment method not found' })
@@ -116,6 +121,7 @@ export class PaymentMethodsController {
 
   @Roles( Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a payment method by ID' })
   @ApiResponse({ status: 200, description: 'Payment method deleted successfully' })
   @ApiResponse({ status: 404, description: 'Payment method not found' })

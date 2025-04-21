@@ -25,6 +25,7 @@ import {
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.SuperAdmin)
 @UseGuards(RolesGuard)
@@ -36,6 +37,7 @@ export class CardsController {
 
   @Roles(Role.SuperAdmin, Role.User)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new card' })
   @ApiResponse({ status: 201, description: 'Card created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -44,6 +46,7 @@ export class CardsController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a list of cards with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -98,6 +101,7 @@ export class CardsController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a card by ID' })
   @ApiResponse({ status: 200, description: 'Card found' })
   @ApiResponse({ status: 404, description: 'Card not found' })
@@ -106,6 +110,7 @@ export class CardsController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a card by ID' })
   @ApiResponse({ status: 200, description: 'Card updated successfully' })
   @ApiResponse({ status: 404, description: 'Card not found' })
@@ -114,6 +119,7 @@ export class CardsController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a card by ID' })
   @ApiResponse({ status: 200, description: 'Card deleted successfully' })
   @ApiResponse({ status: 404, description: 'Card not found' })

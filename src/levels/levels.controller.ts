@@ -25,6 +25,7 @@ import {
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -36,6 +37,7 @@ export class LevelsController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new level' })
   @ApiResponse({ status: 201, description: 'Level created successfully' })
   create(@Body() createLevelDto: CreateLevelDto) {
@@ -43,6 +45,7 @@ export class LevelsController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a list of levels with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -78,6 +81,7 @@ export class LevelsController {
   }
 
   @Get('name/:name')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get level by name' })
   @ApiParam({ name: 'name', required: true })
   findByName(@Param('name') name: string) {
@@ -85,6 +89,7 @@ export class LevelsController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a level by ID' })
   @ApiParam({ name: 'id' })
   findOne(@Param('id') id: string) {
@@ -93,6 +98,7 @@ export class LevelsController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a level by ID' })
   update(@Param('id') id: string, @Body() updateLevelDto: UpdateLevelDto) {
     return this.levelsService.update(id, updateLevelDto);
@@ -100,6 +106,7 @@ export class LevelsController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a level by ID' })
   remove(@Param('id') id: string) {
     return this.levelsService.remove(id);

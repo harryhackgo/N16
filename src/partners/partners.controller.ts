@@ -24,6 +24,7 @@ import {
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -35,6 +36,7 @@ export class PartnersController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new partner' })
   @ApiResponse({ status: 201, description: 'Partner created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -43,6 +45,7 @@ export class PartnersController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a list of partners with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -93,6 +96,7 @@ export class PartnersController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a partner by ID' })
   @ApiResponse({ status: 200, description: 'Partner found' })
   @ApiResponse({ status: 404, description: 'Partner not found' })
@@ -102,6 +106,7 @@ export class PartnersController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a partner by ID' })
   @ApiResponse({ status: 200, description: 'Partner updated successfully' })
   @ApiResponse({ status: 404, description: 'Partner not found' })
@@ -111,6 +116,7 @@ export class PartnersController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a partner by ID' })
   @ApiResponse({ status: 200, description: 'Partner deleted successfully' })
   @ApiResponse({ status: 404, description: 'Partner not found' })

@@ -25,6 +25,7 @@ import {
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -36,6 +37,7 @@ export class OrderWorkersController {
 
   @Roles(Role.User)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new OrderWorker entry' })
   @ApiResponse({ status: 201, description: 'OrderWorker created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -44,6 +46,7 @@ export class OrderWorkersController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a list of OrderWorkers with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -92,6 +95,7 @@ export class OrderWorkersController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get an OrderWorker by ID' })
   @ApiParam({ name: 'id' })
   @ApiResponse({ status: 200, description: 'OrderWorker found' })
@@ -102,6 +106,7 @@ export class OrderWorkersController {
 
   @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update an OrderWorker by ID' })
   @ApiResponse({ status: 200, description: 'OrderWorker updated successfully' })
   @ApiResponse({ status: 404, description: 'OrderWorker not found' })
@@ -111,6 +116,7 @@ export class OrderWorkersController {
 
   @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete an OrderWorker by ID' })
   @ApiResponse({ status: 200, description: 'OrderWorker deleted successfully' })
   @ApiResponse({ status: 404, description: 'OrderWorker not found' })

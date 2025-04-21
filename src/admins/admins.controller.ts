@@ -22,6 +22,7 @@ import {
   ApiOperation,
   ApiResponse,
   ApiQuery,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 
 @ApiTags('Admins')
@@ -32,6 +33,7 @@ export class AdminsController {
   constructor(private readonly adminsService: AdminsService) {}
 
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new admin' })
   @ApiResponse({ status: 201, description: 'Admin created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -41,6 +43,7 @@ export class AdminsController {
 
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all admins with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -88,6 +91,7 @@ export class AdminsController {
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(SelfGuard)
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a single admin by ID' })
   @ApiResponse({ status: 200, description: 'Admin found' })
   @ApiResponse({ status: 404, description: 'Admin not found' })
@@ -98,6 +102,7 @@ export class AdminsController {
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(SelfGuard)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update an admin by ID' })
   @ApiResponse({ status: 200, description: 'Admin updated successfully' })
   @ApiResponse({ status: 404, description: 'Admin not found' })
@@ -108,6 +113,7 @@ export class AdminsController {
   @Roles(Role.Admin, Role.SuperAdmin)
   @UseGuards(SelfGuard)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete an admin by ID' })
   @ApiResponse({ status: 200, description: 'Admin deleted successfully' })
   @ApiResponse({ status: 404, description: 'Admin not found' })

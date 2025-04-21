@@ -26,6 +26,7 @@ import {
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -38,6 +39,7 @@ export class WorkerProficienciesController {
   
   @Roles(Role.Admin, Role.SuperAdmin)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new worker proficiency link' })
   @ApiResponse({ status: 201, description: 'WorkerProficiency created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -46,6 +48,7 @@ export class WorkerProficienciesController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a list of worker proficiencies with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -94,6 +97,7 @@ export class WorkerProficienciesController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a worker proficiency by ID' })
   @ApiParam({ name: 'id' })
   @ApiResponse({ status: 200, description: 'WorkerProficiency found' })
@@ -104,6 +108,7 @@ export class WorkerProficienciesController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a worker proficiency by ID' })
   @ApiResponse({ status: 200, description: 'WorkerProficiency updated successfully' })
   @ApiResponse({ status: 404, description: 'WorkerProficiency not found' })
@@ -116,6 +121,7 @@ export class WorkerProficienciesController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a worker proficiency by ID' })
   @ApiResponse({ status: 200, description: 'WorkerProficiency deleted successfully' })
   @ApiResponse({ status: 404, description: 'WorkerProficiency not found' })

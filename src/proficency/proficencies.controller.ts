@@ -25,6 +25,7 @@ import {
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -36,6 +37,7 @@ export class ProficienciesController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new proficiency' })
   @ApiResponse({ status: 201, description: 'Proficiency created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -44,6 +46,7 @@ export class ProficienciesController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Get a list of proficiencies with optional filters',
   })
@@ -100,6 +103,7 @@ export class ProficienciesController {
   }
 
   @Get('name/:name')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a proficiency by name' })
   @ApiParam({ name: 'name', required: true })
   @ApiResponse({ status: 200, description: 'Proficiency found by name' })
@@ -109,6 +113,7 @@ export class ProficienciesController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a proficiency by ID' })
   @ApiParam({ name: 'id', description: 'Proficiency ID' })
   @ApiResponse({ status: 200, description: 'Proficiency found' })
@@ -119,6 +124,7 @@ export class ProficienciesController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a proficiency by ID' })
   @ApiResponse({ status: 200, description: 'Proficiency updated successfully' })
   @ApiResponse({ status: 404, description: 'Proficiency not found' })
@@ -131,6 +137,7 @@ export class ProficienciesController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a proficiency by ID' })
   @ApiResponse({ status: 200, description: 'Proficiency deleted successfully' })
   @ApiResponse({ status: 404, description: 'Proficiency not found' })

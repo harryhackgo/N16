@@ -98,8 +98,8 @@ export class AuthController {
 
   @Roles(Role.User, Role.ViewerAdmin, Role.SuperAdmin, Role.Admin)
   @UseGuards(RolesGuard)
-  @Get('sessions/me')
   @ApiBearerAuth()
+  @Get('sessions/me')
   @ApiOperation({ summary: 'Get session data for a user' })
   @ApiResponse({ status: 200, description: 'User sessions returned' })
   @ApiResponse({ status: 404, description: 'User not found or no sessions' })
@@ -122,6 +122,7 @@ export class AuthController {
 
   @Post('refresh-token')
   @ApiOperation({ summary: 'Refresh access token' })
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Access token refreshed successfully' })
   @ApiResponse({ status: 401, description: 'Invalid refresh token' })
   @Public()

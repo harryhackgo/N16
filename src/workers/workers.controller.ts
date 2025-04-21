@@ -25,6 +25,7 @@ import {
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles(Role.User, Role.Admin, Role.SuperAdmin, Role.ViewerAdmin)
 @UseGuards(RolesGuard)
@@ -36,6 +37,7 @@ export class WorkersController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new worker' })
   @ApiResponse({ status: 201, description: 'Worker created successfully' })
   @ApiResponse({ status: 400, description: 'Validation failed' })
@@ -44,6 +46,7 @@ export class WorkersController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a list of workers with optional filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
@@ -101,6 +104,7 @@ export class WorkersController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a worker by ID' })
   @ApiParam({ name: 'id', description: 'Worker UUID' })
   @ApiResponse({ status: 200, description: 'Worker found' })
@@ -111,6 +115,7 @@ export class WorkersController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a worker by ID' })
   @ApiParam({ name: 'id', description: 'Worker UUID' })
   @ApiResponse({ status: 200, description: 'Worker updated successfully' })
@@ -124,6 +129,7 @@ export class WorkersController {
 
   @Roles(Role.Admin, Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a worker by ID' })
   @ApiParam({ name: 'id', description: 'Worker UUID' })
   @ApiResponse({ status: 200, description: 'Worker deleted successfully' })

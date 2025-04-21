@@ -19,6 +19,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiTags('Contacts')
 @UseGuards(RolesGuard)
@@ -30,19 +31,28 @@ export class ContactsController {
 
   @Roles(Role.User, Role.SuperAdmin)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a new contact' })
   @ApiResponse({ status: 201, description: 'Contact created successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid input or validation failed' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid input or validation failed',
+  })
   create(@Body() createContactDto: CreateContactDto) {
     return this.contactsService.create(createContactDto);
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a list of contacts with filters' })
   @ApiQuery({ name: 'skip', required: false })
   @ApiQuery({ name: 'take', required: false })
   @ApiQuery({ name: 'cursor', required: false })
-  @ApiQuery({ name: 'search', required: false, description: 'Search by name, email or message' })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    description: 'Search by name, email or message',
+  })
   @ApiQuery({ name: 'orderBy', required: false, example: 'email:asc' })
   @ApiResponse({ status: 200, description: 'List of contacts' })
   findAll(
@@ -84,6 +94,7 @@ export class ContactsController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a contact by ID' })
   @ApiResponse({ status: 200, description: 'Contact found' })
   @ApiResponse({ status: 404, description: 'Contact not found' })
@@ -93,6 +104,7 @@ export class ContactsController {
 
   @Roles(Role.User, Role.SuperAdmin)
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a contact by ID' })
   @ApiResponse({ status: 200, description: 'Contact updated successfully' })
   @ApiResponse({ status: 404, description: 'Contact not found' })
@@ -102,6 +114,7 @@ export class ContactsController {
 
   @Roles(Role.User, Role.Admin, Role.SuperAdmin)
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a contact by ID' })
   @ApiResponse({ status: 200, description: 'Contact deleted successfully' })
   @ApiResponse({ status: 404, description: 'Contact not found' })
