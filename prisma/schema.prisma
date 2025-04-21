@@ -1,0 +1,440 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TimeUnit {
+  hour
+  day
+}
+
+enum OrderStatus {
+  pending
+  in_progress
+  completed
+  canceled
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  failed
+}
+
+model General {
+  id    String  @id @default(uuid())
+  info  String? @unique
+  email String? @unique
+  phone String? @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Contact {
+  id           String  @id @default(uuid())
+  name         String
+  email        String
+  phone_number String?
+  address      String?
+  message      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Admin {
+  id              String  @id @default(uuid())
+  fullname        String
+  email           String  @unique
+  password        String
+  is_super_admin  Boolean @default(false)
+  is_viewer_admin Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Partner {
+  id    String  @id @default(uuid())
+  name  String 
+  image String
+  link  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Faq {
+  id         String  @id @default(uuid())
+  questionUz String?
+  questionRu String?
+  question   String 
+
+  answerUz String?
+  answerRu String?
+  answer   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Showcase {
+  id            String  @id @default(uuid())
+  name          String
+  descriptionUz String?
+  descriptionRu String?
+  description   String
+  image         String
+  link          String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Region {
+  id        String   @id @default(uuid())
+  name      String  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users User[]
+}
+
+model Company {
+  id         String   @id @default(uuid())
+  userId     String
+  name       String @unique
+  aboutUz    String?
+  aboutRu    String?
+  about      String?
+  email      String   @unique
+  phone      String
+  address    String
+  website    String?
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Card {
+  id          String   @id @default(uuid())
+  userId      String
+  card_number String
+  due_date    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  userId       String
+  device       String?
+  ipAddress    String?
+  refreshToken String?
+  userAgent    String?
+  browser      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  lastActiveAt DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model Favorites {
+  id        String   @id @default(uuid())
+  userId    String
+  itemId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User     @relation(fields: [userId], references: [id])
+  item FavItems @relation(fields: [itemId], references: [id])
+
+  @@unique([userId, itemId])
+}
+
+model FavItems {
+  id        String   @id @default(uuid())
+  toolId    String?
+  workerId  String?
+  count     Int
+  timeUnit  TimeUnit
+  time      Int
+  price     Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tool      Tool?       @relation(fields: [toolId], references: [id])
+  worker    Worker?     @relation(fields: [workerId], references: [id])
+  favorites Favorites[]
+}
+
+model User {
+  id         String      @id @default(uuid())
+  fullname  String
+  email      String      @unique
+  password   String
+  phone      String      @unique
+  address    String?
+  username   String      @unique
+  regionId   String?
+  hasCompany Boolean     @default(false)
+  isActive   Boolean     @default(false)
+  otp        String?
+  otpExpires DateTime?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  sessions   Session[]
+  cards      Card[]
+  favorites  Favorites[]
+  orders     Order[]
+  companies  Company[]
+
+  region Region? @relation(fields: [regionId], references: [id])
+}
+
+model Size {
+  id        String   @id @default(uuid())
+  toolId    String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tool Tool @relation(fields: [toolId], references: [id])
+
+  @@unique([toolId, name])
+}
+
+model Capacity {
+  id        String   @id @default(uuid())
+  toolId    String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tool Tool @relation(fields: [toolId], references: [id])
+
+  @@unique([toolId, name])
+}
+
+model Brand {
+  id        String   @id @default(uuid())
+  name      String  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tools Tool[]
+}
+
+model Tool {
+  id            String   @id @default(uuid())
+  name          String
+  brandId       String?
+  price         Float
+  inStockCount  Int 
+  descriptionUz String?
+  descriptionRu String?
+  description   String?
+  bookable      Boolean  @default(true)
+  imagePath     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  favItems   FavItems[]
+  sizes      Size[]
+  capacities Capacity[]
+  orders     OrderTool[]
+
+  brand Brand? @relation(fields: [brandId], references: [id])
+}
+
+model Proficency {
+  id                  String              @id @default(uuid())
+  nameUz              String?
+  nameRu              String?
+  name                String @unique
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  parentId            String?
+  parent              Proficency?         @relation("ProficencyHeriarchy", fields: [parentId], references: [id])
+  children            Proficency[]        @relation("ProficencyHeriarchy")
+  workerProficiencies WorkerProficiency[]
+  orderWorkers        OrderWorker[]
+}
+
+model Level {
+  id        String   @id @default(uuid())
+  name      String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workers      Worker[]
+  orderWorkers OrderWorker[]
+}
+
+model WorkerProficiency {
+  id           String   @id @default(uuid())
+  workerId     String
+  proficencyId String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  worker     Worker     @relation(fields: [workerId], references: [id])
+  proficency Proficency @relation(fields: [proficencyId], references: [id])
+
+  @@unique([workerId, proficencyId])
+}
+
+model Worker {
+  id             String   @id @default(uuid())
+  fullname       String
+  phone          String @unique
+  birthdate      DateTime
+  address        String
+  timeUnit       TimeUnit
+  minWorkingTime Int?
+  maxWorkingTime Int?
+  pricePerHour   Float?
+  pricePerDay    Float?
+  levelId        String
+  experience     Int
+  rating         Float    @default(0)
+  aboutUz        String?
+  aboutRu        String?
+  about          String
+  profileImage   String?
+  idcardImage    String
+  isFree       Boolean  @default(true)
+  isVerified     Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  level               Level               @relation(fields: [levelId], references: [id])
+  favItems            FavItems[]
+  workerProficiencies WorkerProficiency[]
+  commentWorkers      CommentWorker[]
+  attachedWorkers     AttachedWorker[]
+}
+
+model CommentWorker {
+  id        String @id @default(uuid())
+  commentId String
+  workerId  String
+  stars     Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  worker  Worker  @relation(fields: [workerId], references: [id])
+  comment Comment @relation(fields: [commentId], references: [id])
+
+  @@unique([commentId, workerId])
+}
+
+model Comment {
+  id      String  @id @default(uuid())
+  orderId String
+  message String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order          Order           @relation(fields: [orderId], references: [id])
+  commentWorkers CommentWorker[]
+}
+
+model PaymentMethod {
+  id          String   @id @default(uuid())
+  name        String @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orders Order[]
+}
+
+model OrderTool {
+  id        String   @id @default(uuid())
+  orderId   String
+  toolId    String
+  count     Int
+  price     Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id])
+  tool  Tool  @relation(fields: [toolId], references: [id])
+
+  @@unique([orderId, toolId])
+}
+
+model AttachedWorker {
+  id            String   @id @default(uuid())
+  orderWorkerId String
+  workerId      String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  orderWorker OrderWorker @relation(fields: [orderWorkerId], references: [id])
+  worker      Worker      @relation(fields: [workerId], references: [id])
+
+  @@unique([orderWorkerId, workerId])
+}
+
+model OrderWorker {
+  id                  String   @id @default(uuid())
+  orderId             String
+  workerProficiencyId String
+  workerLevelId       String
+  count               Int
+  withTools           Boolean
+  timeUnit            TimeUnit
+  time                Int
+  price               Float
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  workerProficiency Proficency       @relation(fields: [workerProficiencyId], references: [id])
+  workerLevel       Level            @relation(fields: [workerLevelId], references: [id])
+  order             Order            @relation(fields: [orderId], references: [id])
+  attachedWorkers   AttachedWorker[]
+
+  @@index([workerProficiencyId])
+}
+
+model Order {
+  id              String        @id @default(uuid())
+  userId          String
+  status          OrderStatus
+  date            DateTime
+  address         String?
+  overallPrice    Float
+  paymentMethodId String
+  withDelivery    Boolean
+  deliveryComment String?
+  longitude       Decimal?
+  latitude        Decimal?
+  paymentStatus   PaymentStatus @default(pending)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user          User          @relation(fields: [userId], references: [id])
+  paymentMethod PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+
+  orderTools   OrderTool[]
+  orderWorkers OrderWorker[]
+  comments     Comment[]
+
+  @@index([userId])
+  @@index([paymentMethodId])
+}
