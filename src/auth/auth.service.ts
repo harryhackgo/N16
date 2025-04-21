@@ -88,7 +88,6 @@ export class AuthService {
       });
 
       return {
-        message: `User created successfully! Don\'t forget to activate your account through http://localhost:${process.env.PORT}/api/auth/activate within 5 minutes`,
         otp: newUser.otp,
       };
     } catch (error) {
@@ -121,7 +120,7 @@ export class AuthService {
         },
       });
       return {
-        message: 'User account activated successfully',
+        activated: true
       };
     } catch (error) {
       if (error instanceof NotFoundException) {
@@ -151,7 +150,6 @@ export class AuthService {
         },
       });
       return {
-        message: `OTP resent successfully! Don't forget to activate your account through http://localhost:${process.env.PORT}/api/auth/activate within 5 minutes`,
         otp,
       };
     } catch (error) {
