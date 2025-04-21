@@ -198,7 +198,6 @@ export class AuthService {
       throw new NotFoundException('Email or password is wrong');
     }
     const { access_token, refresh_token } = await this.getTokens(admin);
-    await this.sessionsService.createSession(req, admin.id, refresh_token);
     return { access_token, refresh_token };
   }
 
